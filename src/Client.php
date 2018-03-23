@@ -10,10 +10,10 @@
 
 namespace Omniship\Rapido;
 
-use RapidoException;
-use EPSRapidoFacade;
+use Rapido\EPSFacade;
+use Rapido\Exception;
 use Rapido\Response\Service;
-use Rapido\Response\Couriers;
+use Rapido\Response\Courier;
 use Rapido\Response\Quote;
 use Rapido\Response\Country;
 use Rapido\Response\City;
@@ -25,7 +25,7 @@ class Client
 {
 
     /**
-     * @var EPSRapidoFacade
+     * @var EPSFacade
      */
     protected $ePSFacade;
 
@@ -77,7 +77,7 @@ class Client
      */
     public function initialize()
     {
-        $this->ePSFacade = new EPSRapidoFacade($this->test_mode ? static::SERVER_ADDRESS_DEMO : static::SERVER_ADDRESS_PROD, $this->username, $this->password);
+        $this->ePSFacade = new EPSFacade($this->test_mode ? static::SERVER_ADDRESS_DEMO : static::SERVER_ADDRESS_PROD, $this->username, $this->password);
     }
 
     /**
@@ -91,7 +91,7 @@ class Client
 
         try {
             return $this->services = $this->getEPSFacade()->getServices();
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -109,20 +109,20 @@ class Client
 
         try {
             return $this->sub_services[$serviceId] = $this->getEPSFacade()->getSubServices($serviceId);
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
     }
 
     /**
-     * @return bool|Couriers[]
+     * @return bool|Courier[]
      */
     public function getCouriers()
     {
         try {
             return $this->getEPSFacade()->getCouriers();
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -135,7 +135,7 @@ class Client
     {
         try {
             return $this->getEPSFacade()->getCountries();
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -151,7 +151,7 @@ class Client
     {
         try {
             return $this->getEPSFacade()->getCities($country_id, $start, $count);
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -166,7 +166,7 @@ class Client
     {
         try {
             return $this->getEPSFacade()->findCities($name, $country_id);
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -182,7 +182,7 @@ class Client
     {
         try {
             return $this->getEPSFacade()->getStreets($city_id, $start, $count);
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -196,7 +196,7 @@ class Client
     {
         try {
             return $this->getEPSFacade()->getOffices($city_id);
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -210,7 +210,7 @@ class Client
     {
         try {
             return $this->getEPSFacade()->checkCityFixChas($city_id);
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -224,7 +224,7 @@ class Client
     {
         try {
             return $this->getEPSFacade()->checkSiteId($city_id);
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -237,7 +237,7 @@ class Client
     {
         try {
             return $this->getEPSFacade()->getMyObjects();
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -269,7 +269,7 @@ class Client
     {
         try {
             return $this->getEPSFacade()->getMyObjectInfo($object_id);
-        } catch (RapidoException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;
         }
@@ -294,7 +294,7 @@ class Client
             try {
                 $parameters['subservice'] = $sub;
                 $quotes[] = $this->getEPSFacade()->calculate($parameters, $services);
-            } catch (RapidoException $e) {
+            } catch (Exception $e) {
                 $quotes[] = new Quote([
                     'id' => $sub,
                     'name' => !empty($services[$sub]) ? $services[$sub] : '',
@@ -378,7 +378,7 @@ class Client
     }
 
     /**
-     * @return EPSRapidoFacade
+     * @return EPSFacade
      */
     public function getEPSFacade()
     {

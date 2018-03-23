@@ -5,6 +5,7 @@
 
     "require": {
       "php": "^7",
+      "simexis/rapido": "dev-master",
       "simexis/omniship": "dev-master"
     },
 
@@ -12,12 +13,8 @@
 
     "autoload": {
       "psr-4": {
-        "Omniship\\Rapido\\": "src",
-        "Rapido\\": "lib"
-      },
-      "classmap": [
-        "lib"
-      ]
+        "Omniship\\Rapido\\": "src"
+      }
     },
 
 	"authors": [
