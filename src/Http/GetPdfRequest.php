@@ -26,7 +26,7 @@ class GetPdfRequest extends AbstractRequest
      */
     public function sendData($data) {
         $response = $this->getClient()->createPDF($data['bol_id'], $data['type']);
-        return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : ['pdf' => $response]);
+        return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 
     /**

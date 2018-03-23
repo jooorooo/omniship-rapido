@@ -16,10 +16,10 @@ class GetPdfResponse extends AbstractResponse
      */
     public function getData()
     {
-        if(!is_null($this->getCode()) || empty($this->data['pdf'])) {
+        if(!is_null($this->getCode()) || empty($this->data->getPdf())) {
             return false;
         }
-        return $this->data['pdf'];
+        return $this->data->getPdf();
     }
 
 }

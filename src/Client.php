@@ -20,6 +20,7 @@ use Rapido\Response\City;
 use Rapido\Response\Office;
 use Rapido\Response\Street;
 use Rapido\Response\MyObject;
+use Rapido\Response\Pdf;
 
 class Client
 {
@@ -319,10 +320,29 @@ class Client
         return $quotes;
     }
 
+    /**
+     * @param array $parameters
+     * @return bool|Quote
+     */
     public function createBillOfLading(array $parameters)
     {
         try {
             return $this->getEPSFacade()->createOrder($parameters);
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
+     * @param $bol_id
+     * @param int $type
+     * @return bool|Pdf
+     */
+    public function createPDF($bol_id, $type = 1)
+    {
+        try {
+            return $this->getEPSFacade()->createPdf($bol_id, $type);
         } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;

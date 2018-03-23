@@ -193,15 +193,15 @@ class Gateway extends AbstractGateway
 //    {
 //        return $this->createRequest(CodPaymentsRequest::class, $this->setBolId($bol_ids)->getParameters());
 //    }
-//
-//    /**
-//     * @param $bol_id
-//     * @return GetPdfRequest
-//     */
-//    public function getPdf($bol_id)
-//    {
-//        return $this->createRequest(GetPdfRequest::class, $this->setBolId($bol_id)->getParameters());
-//    }
+
+    /**
+     * @param $bol_id
+     * @return GetPdfRequest
+     */
+    public function getPdf($bol_id)
+    {
+        return $this->createRequest(GetPdfRequest::class, $this->setBolId($bol_id)->getParameters());
+    }
 
 
     /**
