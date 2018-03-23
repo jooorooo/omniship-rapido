@@ -9,11 +9,15 @@
 namespace Omniship\Rapido\Http;
 
 use Omniship\Consts;
-use Omniship\Rapido\Client;
 use Omniship\Rapido\Helper\Convert;
 
 class CreateBillOfLadingRequest extends AbstractRequest
 {
+
+    const MEDIATOR = 'simexis';
+    const PLATFORM = 'omniship';
+    const MODULE_VERSION = '1.0.0';
+    const VERSION = '1.0.0';
 
     /**
      * @return array
@@ -57,36 +61,45 @@ class CreateBillOfLadingRequest extends AbstractRequest
                 $data['SITEID_B'] = $city->getId();
             }
             $data['PK_B'] = $receiver_address->getPostCode();
-            if(!empty($street = $receiver_address->getStreet())) {
-                $data['STREET_B'] = $street->getName();
-                if (!empty($street_id = $street->getId())) {
-                    $data['STREETB_ID'] = $street_id;
-                }
-            }
-            if(!empty($street_number = $receiver_address->getStreetNumber())) {
-                $data['STREET_NO_B'] = $street_number;
-            }
-            if(!empty($building = $receiver_address->getBuilding())) {
-                $data['BLOCK_B'] = $building;
-            }
-            if(!empty($entrance = $receiver_address->getEntrance())) {
-                $data['ENTRANCE_B'] = $entrance;
-            }
-            if(!empty($floor = $receiver_address->getFloor())) {
-                $data['FLOOR_B'] = $floor;
-            }
-            if(!empty($apartment = $receiver_address->getApartment())) {
-                $data['APARTMENT_B'] = $apartment;
-            }
-            if(count($lines = array_filter([$receiver_address->getAddress1(), $receiver_address->getAddress2(), $receiver_address->getAddress3()])) > 0) {
-                $data['ADDITIONAL_INFO_B'] = implode(' ', $lines);
-            }
             $data['PHONE_B'] = $receiver_address->getPhone();
             $data['CPERSON_B'] = $receiver_address->getFullName();
 
             if(!empty($office = $receiver_address->getOffice()) && $office->getId()) {
                 $data['TAKEOFFICE'] = $office->getId();
+            } else {
+                if(!empty($street = $receiver_address->getStreet())) {
+                    $data['STREET_B'] = $street->getName();
+                    if (!empty($street_id = $street->getId())) {
+                        $data['STREETB_ID'] = $street_id;
+                    }
+                }
+                if(!empty($street_number = $receiver_address->getStreetNumber())) {
+                    $data['STREET_NO_B'] = $street_number;
+                }
+                if(!empty($building = $receiver_address->getBuilding())) {
+                    $data['BLOCK_B'] = $building;
+                }
+                if(!empty($entrance = $receiver_address->getEntrance())) {
+                    $data['ENTRANCE_B'] = $entrance;
+                }
+                if(!empty($floor = $receiver_address->getFloor())) {
+                    $data['FLOOR_B'] = $floor;
+                }
+                if(!empty($apartment = $receiver_address->getApartment())) {
+                    $data['APARTMENT_B'] = $apartment;
+                }
+                if(count($lines = array_filter([$receiver_address->getAddress1(), $receiver_address->getAddress2(), $receiver_address->getAddress3()])) > 0) {
+                    $data['ADDITIONAL_INFO_B'] = implode(' ', $lines);
+                }
             }
+        }
+
+        if(!empty($sender_address = $this->getReceiverAddress()) && !empty($office = $sender_address->getOffice())) {
+            $data['SENDOFFICE'] = $sender_address->getOffice()->getId();
+//            $params['SENDHOUR'] = $data['sendhour'];
+//            $params['SENDMIN'] = $data['sendmin'];
+//            $params['WORKHOUR'] = $data['workhour'];
+//            $params['WORKMIN'] = $data['workmin'];
         }
 
         $data['fix_chas'] = (int)$this->getOtherParameters('fixed_time_delivery');
@@ -110,13 +123,24 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $data['CENOVA_LISTA'] = 0;
         }
 
-        if ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_TEST) {
+        if ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_OPEN) {
             $data['CHECK_BEFORE_PAY'] = 1;
+        } elseif ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_TEST) {
+            $data['TEST_BEFORE_PAY'] = 1;
         }
 
         if($this->getOtherParameters('saturday_delivery')) {
             $data['SUBOTEN_RAZNOS'] = 1;
         }
+
+        if($this->getOtherParameters('money_transfer')) {
+            $data['POST_MONEY_TRANSFER'] = 1;
+        }
+
+        $data['mediator'] = static::MEDIATOR;
+        $data['platform'] = static::PLATFORM;
+        $data['platform_version'] = static::VERSION;
+        $data['module_version'] = static::MODULE_VERSION;
 
         return $data;
     }
