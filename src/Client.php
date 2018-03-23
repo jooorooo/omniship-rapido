@@ -276,6 +276,20 @@ class Client
     }
 
     /**
+     * @param $bol_id
+     * @return bool
+     */
+    public function cancelBol($bol_id)
+    {
+        try {
+            return $this->getEPSFacade()->cancelOrder($bol_id);
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
      * @param array $parameters
      * @return Quote[]
      */
@@ -303,6 +317,16 @@ class Client
             }
         }
         return $quotes;
+    }
+
+    public function createBillOfLading(array $parameters)
+    {
+        try {
+            return $this->getEPSFacade()->createOrder($parameters);
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
     }
 
     /**

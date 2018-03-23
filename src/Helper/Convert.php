@@ -6,7 +6,7 @@
  * Time: 16:28 ч.
  */
 
-namespace Omniship\Speedy\Helper;
+namespace Omniship\Rapido\Helper;
 
 use Crisu83\Conversion\Quantity\Mass\Unit AS MassUnit;
 use Crisu83\Conversion\Quantity\Length\Unit AS LengthUnit;

@@ -15,10 +15,6 @@ class CancelBillOfLadingRequest extends AbstractRequest
      * @return array
      */
     public function getData() {
-        if(!$login = $this->getClient()->getResultLogin()) {
-            return null;
-        }
-
         return [
             'bol_id' => $this->getBolId(),
             'comment' => $this->getCancelComment()
@@ -30,7 +26,7 @@ class CancelBillOfLadingRequest extends AbstractRequest
      * @return CancelBillOfLadingResponse
      */
     public function sendData($data) {
-        $response = $data ? $this->getClient()->cancelBol($data['bol_id'], $data['comment']) : null;
+        $response = $data ? $this->getClient()->cancelBol($data['bol_id']) : null;
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 

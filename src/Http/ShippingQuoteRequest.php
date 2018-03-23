@@ -10,6 +10,7 @@ namespace Omniship\Rapido\Http;
 
 use Omniship\Consts;
 use Omniship\Rapido\Client;
+use Omniship\Rapido\Helper\Convert;
 use Rapido\Response\Service;
 use Omniship\Helper\Arr;
 
@@ -67,9 +68,15 @@ class ShippingQuoteRequest extends AbstractRequest
         $data['fix_chas'] = (int)$this->getOtherParameters('fixed_time_delivery');
         $data['return_receipt'] = (int)$this->getBackReceipt();
         $data['return_doc'] = (int)$this->getBackDocuments();
-        $data['nal_platej'] = (float)$this->getCashOnDeliveryAmount();
-        $data['zastrahovka'] = (float)$this->getInsuranceAmount();
-        $data['teglo'] = (float)$this->getWeight();
+        if(!empty($cash_on_delivery = $this->getCashOnDeliveryAmount()) && $cash_on_delivery > 0) {
+            $data['nal_platej'] = (float)$cash_on_delivery;
+        }
+        if(!empty($insurance = $this->getInsuranceAmount()) && $insurance > 0) {
+            $data['zastrahovka'] = (float)$insurance;
+        }
+
+        $convert = new Convert();
+        $data['teglo'] = (float)$convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit());
 
         if($this->getPayer() != Consts::PAYER_RECEIVER) {
             $data['ZASMETKA'] = 0;

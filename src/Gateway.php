@@ -138,32 +138,32 @@ class Gateway extends AbstractGateway
 //    {
 //        return $this->createRequest(TrackingParcelsRequest::class, $this->setBolId($bol_ids)->getParameters());
 //    }
-//
-//    /**
-//     * @param array|CreateBillOfLadingRequest $parameters
-//     * @return CreateBillOfLadingRequest
-//     */
-//    public function createBillOfLading($parameters = [])
-//    {
-//        if ($parameters instanceof CreateBillOfLadingRequest) {
-//            return $parameters;
-//        }
-//        if (!is_array($parameters)) {
-//            $parameters = [];
-//        }
-//        return $this->createRequest(CreateBillOfLadingRequest::class, $this->getParameters() + $parameters);
-//    }
-//
-//    /**
-//     * @param $bol_id
-//     * @param null $cancelComment
-//     * @return CancelBillOfLadingRequest
-//     */
-//    public function cancelBillOfLading($bol_id, $cancelComment = null)
-//    {
-//        $this->setBolId((float)$bol_id)->setCancelComment($cancelComment);
-//        return $this->createRequest(CancelBillOfLadingRequest::class, $this->getParameters());
-//    }
+
+    /**
+     * @param array|CreateBillOfLadingRequest $parameters
+     * @return CreateBillOfLadingRequest
+     */
+    public function createBillOfLading($parameters = [])
+    {
+        if ($parameters instanceof CreateBillOfLadingRequest) {
+            return $parameters;
+        }
+        if (!is_array($parameters)) {
+            $parameters = [];
+        }
+        return $this->createRequest(CreateBillOfLadingRequest::class, $this->getParameters() + $parameters);
+    }
+
+    /**
+     * @param $bol_id
+     * @param null $cancelComment
+     * @return CancelBillOfLadingRequest
+     */
+    public function cancelBillOfLading($bol_id, $cancelComment = null)
+    {
+        $this->setBolId($bol_id)->setCancelComment($cancelComment);
+        return $this->createRequest(CancelBillOfLadingRequest::class, $this->getParameters());
+    }
 //
 //    /**
 //     * @param $bol_id
