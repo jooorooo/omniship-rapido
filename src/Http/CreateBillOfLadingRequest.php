@@ -94,8 +94,8 @@ class CreateBillOfLadingRequest extends AbstractRequest
             }
         }
 
-        if(!empty($sender_address = $this->getReceiverAddress()) && !empty($office = $sender_address->getOffice())) {
-            $data['SENDOFFICE'] = $sender_address->getOffice()->getId();
+        if(!empty($sender_office_id = $this->getOtherParameters('sender_office_id'))) {
+            $data['SENDOFFICE'] = $sender_office_id;
 //            $params['SENDHOUR'] = $data['sendhour'];
 //            $params['SENDMIN'] = $data['sendmin'];
 //            $params['WORKHOUR'] = $data['workhour'];
