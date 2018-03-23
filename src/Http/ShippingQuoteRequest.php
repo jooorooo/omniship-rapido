@@ -33,13 +33,11 @@ class ShippingQuoteRequest extends AbstractRequest
             } else {
                 $data['service'] = $service_id;
             }
-        } elseif(!empty($sender_address = $this->getSenderAddress()) && !empty($receiver_address = $this->getReceiverAddress())) {
-            if($sender_address->getCountry() && $receiver_address->getCountry() && $sender_address->getCountry()->getId() != $receiver_address->getCountry()->getId()) {
+        } elseif(!empty($receiver_address = $this->getReceiverAddress())) {
+            if($receiver_address->getCountry() && $receiver_address->getCountry()->getId() != Client::BULGARIA) {
                 $data['service'] = 3;
-            } elseif($sender_address->getCity() && $receiver_address->getCity() && $sender_address->getCity()->getId() != $receiver_address->getCity()->getId()) {
-                $data['service'] = 2;
-            } elseif($sender_address->getCity() && $receiver_address->getCity() && $sender_address->getCity()->getId() == $receiver_address->getCity()->getId()) {
-                $data['service'] = 1;
+            } elseif(!empty($sender_city_id = $this->getOtherParameters('sender_city_id')) && $receiver_address->getCity()) {
+                $data['service'] = $sender_city_id == $receiver_address->getCity()->getId() ? 1 : 2;
             }
         }
 
