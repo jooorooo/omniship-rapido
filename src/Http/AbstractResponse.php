@@ -29,6 +29,8 @@ abstract class AbstractResponse extends BaseAbstractResponse
     {
         if(is_string($this->data)) {
             return $this->data;
+        } elseif(is_object($this->data) && method_exists($this->data, 'getError') && $this->data->getError()) {
+            return $this->data->getError();
         }
         return null;
     }
@@ -43,6 +45,8 @@ abstract class AbstractResponse extends BaseAbstractResponse
                 return $match[1];
             }
             return md5($this->data);
+        } elseif(is_object($this->data) && method_exists($this->data, 'getError') && $this->data->getError()) {
+            return md5($this->data->getError());
         }
         return null;
     }
