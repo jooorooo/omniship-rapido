@@ -8,7 +8,7 @@
 
 namespace Omniship\Rapido\Http;
 
-class TrackingParcelRequest extends AbstractRequest
+class TrackingParcelsRequest extends AbstractRequest
 {
     /**
      * @return integer
@@ -22,7 +22,7 @@ class TrackingParcelRequest extends AbstractRequest
      * @return TrackingParcelResponse
      */
     public function sendData($data) {
-        $response = $this->getClient()->trackParcel($data, $this->getLanguageCode(), false);
+        $response = $this->getClient()->trackParcelMultiple($data);
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 
@@ -32,6 +32,6 @@ class TrackingParcelRequest extends AbstractRequest
      */
     protected function createResponse($data)
     {
-        return $this->response = new TrackingParcelResponse($this, $data);
+        return $this->response = new TrackingParcelsResponse($this, $data);
     }
 }

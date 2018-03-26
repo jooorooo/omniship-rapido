@@ -121,23 +121,23 @@ class Gateway extends AbstractGateway
         return $this->createRequest(ShippingQuoteRequest::class, $this->getParameters() + $parameters);
     }
 
-//    /**
-//     * @param string $bol_id
-//     * @return TrackingParcelRequest
-//     */
-//    public function trackingParcel($bol_id)
-//    {
-//        return $this->createRequest(TrackingParcelRequest::class, $this->setBolId($bol_id)->getParameters());
-//    }
-//
-//    /**
-//     * @param array $bol_ids
-//     * @return TrackingParcelRequest
-//     */
-//    public function trackingParcels(array $bol_ids = [])
-//    {
-//        return $this->createRequest(TrackingParcelsRequest::class, $this->setBolId($bol_ids)->getParameters());
-//    }
+    /**
+     * @param string $bol_id
+     * @return TrackingParcelRequest
+     */
+    public function trackingParcel($bol_id)
+    {
+        return $this->createRequest(TrackingParcelRequest::class, $this->setBolId($bol_id)->getParameters());
+    }
+
+    /**
+     * @param array $bol_ids
+     * @return TrackingParcelRequest
+     */
+    public function trackingParcels(array $bol_ids = [])
+    {
+        return $this->createRequest(TrackingParcelsRequest::class, $this->setBolId($bol_ids)->getParameters());
+    }
 
     /**
      * @param array|CreateBillOfLadingRequest $parameters

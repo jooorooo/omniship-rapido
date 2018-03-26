@@ -350,6 +350,36 @@ class Client
     }
 
     /**
+     * Get status for bill of landing
+     * @param $parcelId
+     * @return bool|Shipment
+     */
+    public function trackParcel($bol_id)
+    {
+        try {
+            return $this->getEPSFacade()->trackOrder($bol_id);
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
+     * Get status for bill of landing
+     * @param $parcelId
+     * @return bool|Shipment
+     */
+    public function trackParcelMultiple($bol_id)
+    {
+        try {
+            return $this->getEPSFacade()->trackOrders($bol_id);
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
      * @param boolean $test_mode
      * @return Client
      */
