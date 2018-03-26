@@ -184,15 +184,6 @@ class Gateway extends AbstractGateway
     {
         return $this->createRequest(CodPaymentRequest::class, $this->setBolId($bol_id)->getParameters());
     }
-//
-//    /**
-//     * @param array $bol_ids
-//     * @return CodPaymentRequest
-//     */
-//    public function codPayments(array $bol_ids)
-//    {
-//        return $this->createRequest(CodPaymentsRequest::class, $this->setBolId($bol_ids)->getParameters());
-//    }
 
     /**
      * @param $bol_id
