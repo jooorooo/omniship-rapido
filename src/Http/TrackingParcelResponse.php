@@ -30,11 +30,11 @@ class TrackingParcelResponse extends AbstractResponse
             /** @var Tracking $track */
             $track = $this->data;
             $result->push([
-                'id' => md5($track->toJson()),
+                'id' => ($id = md5($track->toJson())),
                 'name' => $track->getPlace(),
                 'events' => new EventBag(),
                 'shipment_date' => $track->getDate(),
-                'destination_service_area' => new Component(['id' => md5($track->toJson()), 'name' => $track->getPlace()])
+                'destination_service_area' => new Component(['id' => $id, 'name' => $track->getPlace()])
             ]);
         }
         return $result;
