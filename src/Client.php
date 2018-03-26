@@ -21,6 +21,7 @@ use Rapido\Response\Office;
 use Rapido\Response\Street;
 use Rapido\Response\MyObject;
 use Rapido\Response\Pdf;
+use Rapido\Response\Tracking;
 
 class Client
 {
@@ -351,8 +352,8 @@ class Client
 
     /**
      * Get status for bill of landing
-     * @param $parcelId
-     * @return bool|Shipment
+     * @param $bol_id
+     * @return bool|null|Tracking
      */
     public function trackParcel($bol_id)
     {
@@ -366,8 +367,8 @@ class Client
 
     /**
      * Get status for bill of landing
-     * @param $parcelId
-     * @return bool|Shipment
+     * @param $bol_id
+     * @return bool|Tracking[]
      */
     public function trackParcelMultiple($bol_id)
     {
