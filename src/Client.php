@@ -381,6 +381,23 @@ class Client
     }
 
     /**
+     * @param int $count
+     * @param float $weight
+     * @param int $sendoffice
+     * @param string $readiness
+     * @return array
+     */
+    public function requestCourier($count, $weight, $sendoffice = 0, $readiness = '')
+    {
+        try {
+            return $this->getEPSFacade()->requestCourier($count, $weight, $sendoffice, $readiness);
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
      * @param boolean $test_mode
      * @return Client
      */

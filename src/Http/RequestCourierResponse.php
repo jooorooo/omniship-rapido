@@ -9,14 +9,13 @@
 namespace Omniship\Rapido\Http;
 
 use Omniship\Common\RequestCourier;
-use ResultOrderPickingInfo;
 
 class RequestCourierResponse extends AbstractResponse
 {
     /**
      * The data contained in the response.
      *
-     * @var ResultOrderPickingInfo[]
+     * @var \Rapido\Response\RequestCourier[]
      */
     protected $data;
 
@@ -25,17 +24,15 @@ class RequestCourierResponse extends AbstractResponse
      */
     public function getData()
     {
-        if(!is_null($this->getCode()) || !is_array($this->data)) {
-            return [];
-        }
-
         $results = [];
-        foreach($this->data AS $result) {
+        /** @var \Omniship\Common\RequestCourier $data */
+        $data = $this->data;
+        foreach((array)$this->getRequest()->getBolId() AS $bol_id) {
             $results[] = new RequestCourier([
-                'bol_id' => $result->getBillOfLading(),
+                'bol_id' => $bol_id,
                 'pickup_date' => $this->getRequest()->getEndDate(),
-                'error' => $result->getErrorDescriptions() ? : null,
-                'error_code' => $result->getErrorDescriptions() ? md5($result->getErrorDescriptions()) : null,
+                'error' => $data->getError(),
+                'error_code' => $data->getError() ? md5($data->getError()) : $data->getError(),
             ]);
         }
 

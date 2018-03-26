@@ -8,6 +8,8 @@
 
 namespace Omniship\Rapido\Http;
 
+use Omniship\Rapido\Helper\Convert;
+
 class RequestCourierRequest extends AbstractRequest
 {
 
@@ -15,14 +17,12 @@ class RequestCourierRequest extends AbstractRequest
      * @return array
      */
     public function getData() {
-        if(!$login = $this->getClient()->getResultLogin()) {
-            return null;
-        }
-
+        $convert = new Convert();
         return [
             'bol_id' => $this->getBolId(),
-            'start_date' => $this->getStartDate(),
-            'end_date' => $this->getStartDate()
+            'sender_office_id' => (int)$this->getOtherParameters('sender_office_id'),
+            'readiness' => $this->getOtherParameters('readiness'),
+            'weight' => $convert->convertWeightUnit($this->getWeight(), $this->getWeightUnit()),
         ];
     }
 
@@ -31,7 +31,7 @@ class RequestCourierRequest extends AbstractRequest
      * @return RequestCourierResponse
      */
     public function sendData($data) {
-        $response = $data ? $this->getClient()->requestCourier($data['bol_id'], $data['start_date'], $data['end_date']) : null;
+        $response = $data ? $this->getClient()->requestCourier(count($data['bol_id']), $data['weight'], $data['sender_office_id'], $data['readiness']) : null;
         return $this->createResponse(!$response && $this->getClient()->getError() ? $this->getClient()->getError() : $response);
     }
 
