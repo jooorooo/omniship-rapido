@@ -175,15 +175,15 @@ class Gateway extends AbstractGateway
     {
         return $this->createRequest(RequestCourierRequest::class, $this->setBolId(array_map('floatval', (array)$bol_id))->setStartDate($date_start)->setEndDate($date_end)->getParameters());
     }
-//
-//    /**
-//     * @param $bol_id
-//     * @return CodPaymentRequest
-//     */
-//    public function codPayment($bol_id)
-//    {
-//        return $this->createRequest(CodPaymentRequest::class, $this->setBolId($bol_id)->getParameters());
-//    }
+
+    /**
+     * @param $bol_id
+     * @return CodPaymentRequest
+     */
+    public function codPayment($bol_id)
+    {
+        return $this->createRequest(CodPaymentRequest::class, $this->setBolId($bol_id)->getParameters());
+    }
 //
 //    /**
 //     * @param array $bol_ids

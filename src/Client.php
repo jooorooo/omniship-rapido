@@ -10,6 +10,8 @@
 
 namespace Omniship\Rapido;
 
+use Omniship\Common\CodPayment;
+use Omniship\Common\RequestCourier;
 use Rapido\EPSFacade;
 use Rapido\Exception;
 use Rapido\Response\Service;
@@ -385,12 +387,27 @@ class Client
      * @param float $weight
      * @param int $sendoffice
      * @param string $readiness
-     * @return array
+     * @return false|RequestCourier
      */
     public function requestCourier($count, $weight, $sendoffice = 0, $readiness = '')
     {
         try {
             return $this->getEPSFacade()->requestCourier($count, $weight, $sendoffice, $readiness);
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
+     * Documentation : Връща информация дали товарителница е изплатена
+     * @param $bol_id
+     * @return boolean|CodPayment
+     */
+    public function codPayment($bol_id)
+    {
+        try {
+            return $this->getEPSFacade()->codPayment($bol_id);
         } catch (Exception $e) {
             $this->error = $e->getMessage();
             return false;

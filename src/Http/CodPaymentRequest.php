@@ -15,10 +15,6 @@ class CodPaymentRequest extends AbstractRequest
      * @return integer
      */
     public function getData() {
-        if(!$login = $this->getClient()->getResultLogin()) {
-            return null;
-        }
-
         return $this->getBolId();
     }
 
