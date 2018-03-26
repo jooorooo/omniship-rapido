@@ -248,6 +248,19 @@ class Client
     }
 
     /**
+     * @return bool|MyObject[]
+     */
+    public function getInvoiceType()
+    {
+        try {
+            return $this->getEPSFacade()->getMyObjects();
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
      * @param $username
      * @param $password
      * @return bool
