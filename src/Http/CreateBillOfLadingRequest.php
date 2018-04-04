@@ -31,10 +31,10 @@ class CreateBillOfLadingRequest extends AbstractRequest
         if(strpos($service, '_') !== false) {
             list($service_id, $sub_service_id) = explode('_', $service);
             $data['service'] = $service_id;
-            $data['subservice'] = [$sub_service_id];
+            $data['subservice'] = $sub_service_id;
         } else {
             $data['service'] = $service;
-            $data['subservice'] = [0];
+            $data['subservice'] = 0;
         }
 
         if(!empty($cash_on_delivery = $this->getCashOnDeliveryAmount()) && $cash_on_delivery > 0) {
