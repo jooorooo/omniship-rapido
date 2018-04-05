@@ -102,7 +102,9 @@ class CreateBillOfLadingRequest extends AbstractRequest
 //            $params['WORKMIN'] = $data['workmin'];
         }
 
-        $data['fix_chas'] = (int)$this->getOtherParameters('fixed_time_delivery');
+        if(!empty($fixed_time_delivery = $this->getOtherParameters('fixed_time_delivery')) && preg_match('~^(ПРЕДИ|ТОЧНО|СЛЕД):([\d]{2}):([\d]{2})$~i', $fixed_time_delivery)) {
+            $data['fix_chas'] = $fixed_time_delivery;
+        }
         $data['return_receipt'] = (int)$this->getBackReceipt();
         $data['return_doc'] = (int)$this->getBackDocuments();
 
@@ -125,8 +127,6 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         if ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_OPEN) {
             $data['CHECK_BEFORE_PAY'] = 1;
-        } elseif ($this->getOptionBeforePayment() == Consts::OPTION_BEFORE_PAYMENT_TEST) {
-            $data['TEST_BEFORE_PAY'] = 1;
         }
 
         if($this->getOtherParameters('saturday_delivery')) {
