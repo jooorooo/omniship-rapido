@@ -8,6 +8,7 @@
 
 namespace Omniship\Rapido\Http;
 
+use Carbon\Carbon;
 use Omniship\Consts;
 use Omniship\Rapido\Helper\Convert;
 
@@ -94,12 +95,17 @@ class CreateBillOfLadingRequest extends AbstractRequest
             }
         }
 
-        if(!empty($sender_office_id = $this->getOtherParameters('sender_office_id'))) {
+        if(!is_null($sender_office_id = $this->getOtherParameters('sender_office_id'))) {
             $data['SENDOFFICE'] = $sender_office_id;
-//            $params['SENDHOUR'] = $data['sendhour'];
-//            $params['SENDMIN'] = $data['sendmin'];
-//            $params['WORKHOUR'] = $data['workhour'];
-//            $params['WORKMIN'] = $data['workmin'];
+            /** @var Carbon $send_time */
+            if(($send_time = $this->getOtherParameters('send_time')) instanceof Carbon) {
+                $params['SENDHOUR'] = $send_time->format('H');
+                $params['SENDMIN'] = $send_time->format('i');
+            }
+            if(($work_time = $this->getOtherParameters('work_time')) instanceof Carbon) {
+                $params['WORKHOUR'] = $work_time->format('H');
+                $params['WORKMIN'] = $work_time->format('i');
+            }
         }
 
         if(!empty($fixed_time_delivery = $this->getOtherParameters('fixed_time_delivery')) && preg_match('~^(ПРЕДИ|ТОЧНО|СЛЕД):([\d]{2}):([\d]{2})$~i', $fixed_time_delivery)) {
@@ -110,6 +116,10 @@ class CreateBillOfLadingRequest extends AbstractRequest
 
         $data['PACK_COUNT'] = $this->getNumberOfPieces();
         $data['CLIENT_REF1'] = $this->getTransactionId();
+
+        if(!empty($email = $this->getReceiverEmail())) {
+            $params['EMAIL_B'] = $email;
+        }
 
         if($this->getPayer() != Consts::PAYER_RECEIVER) {
             $data['ZASMETKA'] = 0;
@@ -133,8 +143,10 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $data['SUBOTEN_RAZNOS'] = 1;
         }
 
-        if($this->getOtherParameters('money_transfer')) {
-            $data['POST_MONEY_TRANSFER'] = 1;
+        $data['POST_MONEY_TRANSFER'] = (int)$this->getMoneyTransfer();
+
+        if(!empty($pazar = $this->getOtherParameters('pazar'))) {
+            $data['PAZAR'] = $pazar;
         }
 
         $data['mediator'] = static::MEDIATOR;
