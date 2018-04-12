@@ -99,12 +99,12 @@ class CreateBillOfLadingRequest extends AbstractRequest
             $data['SENDOFFICE'] = $sender_office_id;
             /** @var Carbon $send_time */
             if(($send_time = $this->getOtherParameters('send_time')) instanceof Carbon) {
-                $params['SENDHOUR'] = $send_time->format('H');
-                $params['SENDMIN'] = $send_time->format('i');
+                $data['SENDHOUR'] = $send_time->format('H');
+                $data['SENDMIN'] = $send_time->format('i');
             }
             if(($work_time = $this->getOtherParameters('work_time')) instanceof Carbon) {
-                $params['WORKHOUR'] = $work_time->format('H');
-                $params['WORKMIN'] = $work_time->format('i');
+                $data['WORKHOUR'] = $work_time->format('H');
+                $data['WORKMIN'] = $work_time->format('i');
             }
         }
 

@@ -310,13 +310,20 @@ class Client
      * @param array $parameters
      * @return Quote[]
      */
-    public function calculate(array $parameters)
+    public function calculate($parameters)
     {
+        if(is_string($parameters)) {
+            return $parameters;
+        }
         $service_id = !empty($parameters['service']) ? $parameters['service'] : 0;
         $sub_services = !empty($parameters['subservice']) && is_array($parameters['subservice']) ? $parameters['subservice'] : [];
 
+        if(!is_array($services_get = $this->getSubServices($service_id))) {
+            return $this->getError();
+        }
+
         $services = [];
-        foreach ($this->getSubServices($service_id) AS $s) {
+        foreach ($services_get AS $s) {
             $services[$s->getTypeId()] = $s->getName();
         }
 
@@ -326,13 +333,10 @@ class Client
                 $parameters['subservice'] = $sub;
                 $quotes[] = $this->getEPSFacade()->calculate($parameters, $services);
             } catch (Exception $e) {
-                $quotes[] = new Quote([
-                    'id' => $sub,
-                    'name' => !empty($services[$sub]) ? $services[$sub] : '',
-                    'PERROR' => $e->getMessage()
-                ]);
+                return $e->getMessage();
             }
         }
+
         return $quotes;
     }
 

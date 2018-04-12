@@ -54,9 +54,12 @@ class ShippingQuoteRequest extends AbstractRequest
         }
 
         if(empty($data['subservice']) && !empty($data['service']) && !in_array($data['service'], [3,7,9])) {
+            if(!is_array($sub_services = $this->getClient()->getSubServices($data['service']))) {
+                return $this->getClient()->getError();
+            }
             $data['subservice'] = array_map(function(Service $sub_service) {
                 return $sub_service->getTypeId();
-            }, $this->getClient()->getSubServices($data['service']));
+            }, $sub_services);
         }
 
         if(!empty($receiver_address = $this->getReceiverAddress()) && !empty($country = $receiver_address->getCountry()) && $country->getId() != Client::BULGARIA) {
