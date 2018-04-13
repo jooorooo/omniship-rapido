@@ -101,10 +101,16 @@ class CreateBillOfLadingRequest extends AbstractRequest
             if(($send_time = $this->getOtherParameters('send_time')) instanceof Carbon) {
                 $data['SENDHOUR'] = $send_time->format('H');
                 $data['SENDMIN'] = $send_time->format('i');
+            } elseif(preg_match('~^([\d]{2}):([\d]{2})$~', $this->getOtherParameters('send_time'), $match)) {
+                $data['SENDHOUR'] = sprintf('%02d', $match[1]);
+                $data['SENDMIN'] = sprintf('%02d', $match[2]);
             }
             if(($work_time = $this->getOtherParameters('work_time')) instanceof Carbon) {
                 $data['WORKHOUR'] = $work_time->format('H');
                 $data['WORKMIN'] = $work_time->format('i');
+            } elseif(preg_match('~^([\d]{2}):([\d]{2})$~', $this->getOtherParameters('work_time'), $match)) {
+                $data['WORKHOUR'] = sprintf('%02d', $match[1]);
+                $data['WORKMIN'] = sprintf('%02d', $match[2]);
             }
         }
 
