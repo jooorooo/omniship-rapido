@@ -38,6 +38,13 @@ class ShippingQuoteRequest extends AbstractRequest
                 $data['service'] = 3;
             } elseif(!empty($sender_city_id = $this->getOtherParameters('sender_city_id')) && $receiver_address->getCity()) {
                 $data['service'] = $sender_city_id == $receiver_address->getCity()->getId() ? 1 : 2;
+            } else {
+                if(!is_array($addresses = $this->getClient()->getMyObjects())) {
+                    return $this->getClient()->getError();
+                }
+                if($receiver_address->getCity()) {
+                    $data['service'] = array_shift($addresses)->getSiteId() == $receiver_address->getCity()->getId() ? 1 : 2;
+                }
             }
         }
 
