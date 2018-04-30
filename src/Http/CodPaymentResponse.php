@@ -8,9 +8,8 @@
 
 namespace Omniship\Rapido\Http;
 
-use Carbon\Carbon;
 use Omniship\Common\CodPayment;
-use CODPayment AS RapidoCODPayment;
+use \Rapido\Response\CodPayment AS RapidoCODPayment;
 
 class CodPaymentResponse extends AbstractResponse
 {
@@ -32,8 +31,8 @@ class CodPaymentResponse extends AbstractResponse
 
         $cod_payment = new CodPayment([
             'id' => $this->getRequest()->getBolId(),
-            'date' => Carbon::createFromFormat('Y-m-d\TH:i:sP', $this->data->getDate()),
-            'price' => $this->data->getTotalPayedOutAmount()
+            'date' => $this->data->getDate(),
+            'price' => $this->data->getTotal()
         ]);
         return $cod_payment;
     }
