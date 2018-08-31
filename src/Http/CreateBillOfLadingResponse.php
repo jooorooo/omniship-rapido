@@ -9,9 +9,16 @@
 namespace Omniship\Rapido\Http;
 
 use Omniship\Common\Bill\Create;
+use Rapido\Response\BillOfLading;
 
 class CreateBillOfLadingResponse extends AbstractResponse
 {
+    /**
+     * The data contained in the response.
+     *
+     * @var BillOfLading
+     */
+    protected $data;
 
     /**
      * @return Create
@@ -20,6 +27,12 @@ class CreateBillOfLadingResponse extends AbstractResponse
     {
         $result = new Create();
         $result->setServiceId($this->getRequest()->getServiceId());
+
+        if($this->data instanceof BillOfLading) {
+            $result->setError(is_string($this->data) ? $this->data : json_encode($this->data));
+            return $result;
+        }
+
         $result->setBolId($this->data->getId());
         $result->setBillOfLadingSource($this->data->getPdf());
         $result->setBillOfLadingType($result::PDF);
