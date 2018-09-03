@@ -28,7 +28,7 @@ class CreateBillOfLadingResponse extends AbstractResponse
         $result = new Create();
         $result->setServiceId($this->getRequest()->getServiceId());
 
-        if($this->data instanceof BillOfLading) {
+        if(!($this->data instanceof BillOfLading)) {
             $result->setCurrency('BGN'); //@todo return price in BGN
             $result->setError(is_string($this->data) ? $this->data : json_encode($this->data));
             return $result;
