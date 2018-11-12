@@ -15,7 +15,7 @@ use Omniship\Rapido\Helper\Convert;
 class CreateBillOfLadingRequest extends AbstractRequest
 {
 
-    const MEDIATOR = 'simexis';
+    const MEDIATOR = 'CLOUDCART';
     const PLATFORM = 'omniship';
     const MODULE_VERSION = '1.0.0';
     const VERSION = '1.0.0';
