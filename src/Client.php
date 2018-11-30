@@ -60,6 +60,11 @@ class Client
      */
     protected $sub_services = [];
 
+    /**
+     * @var null|array
+     */
+    protected $connection_options;
+
     const SERVER_ADDRESS_DEMO = 'https://www.rapido.bg/testsystem/schema.wsdl';
 
     const SERVER_ADDRESS_PROD = 'https://www.rapido.bg/rsystem2/schema.wsdl';
@@ -68,11 +73,12 @@ class Client
 
     const BULGARIA = 100;
 
-    public function __construct($username, $password, $test_mode)
+    public function __construct($username, $password, $test_mode, array $connection_options = null)
     {
         $this->username = $username;
         $this->password = $password;
         $this->test_mode = $test_mode;
+        $this->connection_options = $connection_options;
         $this->initialize();
     }
 
@@ -81,7 +87,28 @@ class Client
      */
     public function initialize()
     {
-        $this->ePSFacade = new EPSFacade($this->test_mode ? static::SERVER_ADDRESS_DEMO : static::SERVER_ADDRESS_PROD, $this->username, $this->password);
+
+        try {
+            $soap_options = array(
+                'wsdl_cache_wsdl' => WSDL_CACHE_NONE,
+                'wsdl_trace' => 1
+            );
+            $soap_server_address = $this->test_mode ? static::SERVER_ADDRESS_DEMO : static::SERVER_ADDRESS_PROD;
+            $connection_timeout = 0;
+            $retries = 1;
+            $read_timeout = null;
+            if(is_array($this->connection_options)) {
+                extract($this->connection_options);
+            }
+
+            $this->ePSFacade = new EPSFacade($soap_server_address, $this->username, $this->password, $soap_options, $connection_timeout, $retries, $read_timeout);
+            return true;
+        } catch (Exception $e) {
+            $this->error = $e->getMessage();
+            return false;
+        }
+
+
     }
 
     /**

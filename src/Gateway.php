@@ -204,6 +204,7 @@ class Gateway extends AbstractGateway
     public function validateCredentials(array $parameters = [], $test_mode = null)
     {
         $instance = new Gateway();
+        $instance->setConnectionOptions($this->getConnectionOptions());
         $instance->initialize($parameters);
         $instance->setTestMode(is_null($test_mode) ? $this->getTestMode() : (bool)$test_mode);
         return $instance->createRequest(ValidateCredentialsRequest::class, $instance->getParameters());
@@ -215,7 +216,7 @@ class Gateway extends AbstractGateway
     public function getClient()
     {
         if (is_null($this->client)) {
-            $this->client = new Client($this->getUsername(), $this->getPassword(), $this->getTestMode());
+            $this->client = new Client($this->getUsername(), $this->getPassword(), $this->getTestMode(), $this->getConnectionOptions());
         }
         return $this->client;
     }

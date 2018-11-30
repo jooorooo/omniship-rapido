@@ -57,7 +57,7 @@ abstract class AbstractRequest extends BaseAbstractRequest
     public function getClient()
     {
         if(is_null($this->client)) {
-            $this->client = new RapidoClient($this->getUsername(), $this->getPassword(), $this->getTestMode());
+            $this->client = new RapidoClient($this->getUsername(), $this->getPassword(), $this->getTestMode(), $this->getConnectionOptions());
         }
         return $this->client;
     }
